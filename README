@@ -1,1 +1,10 @@
 Game of life at code retreat, Prairie Dev Conference 2011
+
+to use build script install nuget and ruby.
+
+to build:
+rake
+
+to run tests use...
+rake test:acceptance
+rake test:unit
