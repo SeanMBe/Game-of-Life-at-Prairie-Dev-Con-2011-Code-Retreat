@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using CodeRetreat.Core;
 using MavenThought.Commons;
 using MavenThought.Commons.Extensions;
@@ -25,7 +25,7 @@ namespace CodeRetreat.Acceptance.Tests.Steps
             private IEnumerable<Pair<int, int>> ParseGameBoard(Table table)
             {
                 var gameBoardInitialState = new List<Pair<int, int>>();
-               
+
                 table.Rows.ForEach((y, r) => Parse(r, y).ForEach(gameBoardInitialState.Add));
                 return gameBoardInitialState;
             }
@@ -56,31 +56,22 @@ namespace CodeRetreat.Acceptance.Tests.Steps
                 var width = table.Header.Count() - 1;
                 var height = table.Rows.Count() - 1;
 
-                width.Times(x => height.Times(y =>
-                                                  {
-                                                      Debug.WriteLine("({0},{1}) == {2}", x, y, liveCells.Find(c => c.First == x && c.Second == y) == null
-                                                              ? false
-                                                              : true);
-                                                      CurrentGameBoard.StatusOfCell(x, y).Should().Be.EqualTo(
-                                                          liveCells.Find(c => c.First == x && c.Second == y) == null
-                                                              ? false
-                                                              : true);
-                                                  }
-                    ));
+                var expectedStateOfCell = new Func<int, int, bool>((x,y) => 
+                    liveCells.Find(c => c.First == x && c.Second == y) == null ? false : true);
 
+                width.Times(x => height.Times(y => 
+                    CurrentGameBoard.StatusOfCell(x, y).Should().Be.EqualTo(expectedStateOfCell(x,y))));
             }
 
-
-             
-            private IEnumerable<Pair<int, int>> Parse(TableRow tableRow, int y)
+            private static IEnumerable<Pair<int, int>> Parse(TableRow tableRow, int y)
             {
                 var cells = new List<Pair<int, int>>();
 
                 tableRow.ForEach((x, cell) =>
                                      {
-                                         if(cell.Value != ".")
+                                         if (cell.Value != ".")
                                          {
-                                            cells.Add(new Pair<int, int>(x, y));      
+                                             cells.Add(new Pair<int, int>(x, y));
                                          }
                                      });
 
@@ -88,7 +79,5 @@ namespace CodeRetreat.Acceptance.Tests.Steps
                 return cells;
             }
         }
-
-
     }
 }

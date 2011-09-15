@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MavenThought.Commons;
@@ -87,7 +85,8 @@ namespace CodeRetreat.Core
         {
             var liveNeighbours = FindLiveNeighbours(cell);
 
-            IEnumerable<Pair<int, int>> adjacentNeighbours = new List<Pair<int, int>>() {
+            IEnumerable<Pair<int, int>> adjacentNeighbours = new List<Pair<int, int>>
+            {
                 new Pair<int, int>(cell.First - 1, cell.Second),
                 new Pair<int, int>(cell.First + 1, cell.Second),
                 new Pair<int, int>(cell.First, cell.Second - 1),
